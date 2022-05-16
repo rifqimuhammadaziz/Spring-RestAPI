@@ -1,11 +1,13 @@
 package rifqimuhammadaziz.springrestapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import rifqimuhammadaziz.springrestapi.model.entity.Product;
 import rifqimuhammadaziz.springrestapi.service.ProductService;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/products")
@@ -15,7 +17,14 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
+    public Product create(@Valid @RequestBody Product product, Errors errors) {
+        // If any error, print error & throw exception
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                System.out.println(error.getDefaultMessage());
+            }
+            throw new RuntimeException("Validation Error");
+        }
         return productService.save(product);
     }
 
