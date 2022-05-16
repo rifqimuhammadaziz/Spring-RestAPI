@@ -1,9 +1,12 @@
 package rifqimuhammadaziz.springrestapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import rifqimuhammadaziz.springrestapi.dto.ResponseData;
 import rifqimuhammadaziz.springrestapi.model.entity.Product;
 import rifqimuhammadaziz.springrestapi.service.ProductService;
 
@@ -17,15 +20,21 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product create(@Valid @RequestBody Product product, Errors errors) {
-        // If any error, print error & throw exception
+    public ResponseEntity<ResponseData<Product>> create(@Valid @RequestBody Product product, Errors errors) {
+        ResponseData<Product> responseData = new ResponseData<>();
+
+        // If any error, return custom error message
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
-                System.out.println(error.getDefaultMessage());
+                responseData.getMessages().add(error.getDefaultMessage());
             }
-            throw new RuntimeException("Validation Error");
+            responseData.setStatus(false);
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
-        return productService.save(product);
+        responseData.setStatus(true);
+        responseData.setPayload(productService.save(product));
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping
@@ -39,8 +48,21 @@ public class ProductController {
     }
 
     @PutMapping
-    public Product update(@RequestBody Product product) {
-        return productService.save(product);
+    public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
+        ResponseData<Product> responseData = new ResponseData<>();
+
+        // If any error, return custom error message
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+        responseData.setStatus(true);
+        responseData.setPayload(productService.save(product));
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping("/{id}")
