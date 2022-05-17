@@ -7,7 +7,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import rifqimuhammadaziz.springrestapi.dto.ResponseData;
+import rifqimuhammadaziz.springrestapi.dto.SupplierData;
 import rifqimuhammadaziz.springrestapi.model.entity.Product;
+import rifqimuhammadaziz.springrestapi.model.entity.Supplier;
 import rifqimuhammadaziz.springrestapi.service.ProductService;
 
 import javax.validation.Valid;
@@ -68,5 +70,10 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         productService.removeById(id);
+    }
+
+    @PostMapping("/{id}")
+    public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId) {
+        productService.addSupplier(supplier, productId);
     }
 }

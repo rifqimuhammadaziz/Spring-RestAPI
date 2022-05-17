@@ -3,6 +3,7 @@ package rifqimuhammadaziz.springrestapi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rifqimuhammadaziz.springrestapi.model.entity.Product;
+import rifqimuhammadaziz.springrestapi.model.entity.Supplier;
 import rifqimuhammadaziz.springrestapi.model.repository.ProductRepository;
 
 import javax.transaction.Transactional;
@@ -39,5 +40,14 @@ public class ProductService {
 
     public List<Product> findByName(String name) {
         return productRepository.findProductsByName(name);
+    }
+
+    public void addSupplier(Supplier supplier, Long productId) {
+        Product product = findById(productId);
+        if (product == null) {
+            throw new RuntimeException("Product with id: " +productId+ "not found.");
+        }
+        product.getSuppliers().add(supplier);
+        save(product);
     }
 }

@@ -1,5 +1,10 @@
 package rifqimuhammadaziz.springrestapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -7,6 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id") // To fix recursive loop json
 public class Product implements Serializable {
 
     @Id // Primary Key
@@ -31,6 +39,7 @@ public class Product implements Serializable {
             name = "product_supplier",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "supplier_id")) // Config new relationship table
+    // @JsonManagedReference // Fix recursive loop
     private Set<Supplier> suppliers;
 
     public Set<Supplier> getSuppliers() {
