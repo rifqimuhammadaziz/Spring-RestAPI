@@ -7,12 +7,14 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import rifqimuhammadaziz.springrestapi.dto.ResponseData;
+import rifqimuhammadaziz.springrestapi.dto.SearchData;
 import rifqimuhammadaziz.springrestapi.dto.SupplierData;
 import rifqimuhammadaziz.springrestapi.model.entity.Product;
 import rifqimuhammadaziz.springrestapi.model.entity.Supplier;
 import rifqimuhammadaziz.springrestapi.service.ProductService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -75,5 +77,25 @@ public class ProductController {
     @PostMapping("/{id}")
     public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId) {
         productService.addSupplier(supplier, productId);
+    }
+
+    @PostMapping("/search/name")
+    public Product getProductByName(@RequestBody SearchData searchData) {
+        return productService.findProductByName(searchData.getSearchKey());
+    }
+
+    @PostMapping("/search/namelike")
+    public List<Product> getProductsByNameLike(@RequestBody SearchData searchData) {
+        return productService.findProductsByName(searchData.getSearchKey());
+    }
+
+    @GetMapping("/search/category/{categoryId}")
+    public List<Product> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
+        return productService.findProductsByCategory(categoryId);
+    }
+
+    @GetMapping("/search/supplier/{supplierId}")
+    public List<Product> getProductsBySupplier(@PathVariable("supplierId") Long supplierId) {
+        return productService.findProductsBySupplier(supplierId);
     }
 }

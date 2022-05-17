@@ -12,9 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id") // To fix recursive loop json
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id") // To fix recursive loop json
 public class Product implements Serializable {
 
     @Id // Primary Key
@@ -39,7 +39,7 @@ public class Product implements Serializable {
             name = "product_supplier",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "supplier_id")) // Config new relationship table
-    // @JsonManagedReference // Fix recursive loop
+    @JsonManagedReference // Fix recursive loop
     private Set<Supplier> suppliers;
 
     public Set<Supplier> getSuppliers() {

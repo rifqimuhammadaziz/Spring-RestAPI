@@ -7,6 +7,7 @@ import rifqimuhammadaziz.springrestapi.model.entity.Supplier;
 import rifqimuhammadaziz.springrestapi.model.repository.ProductRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,9 @@ public class ProductService {
 
     @Autowired // Dependency Injection
     private ProductRepository productRepository;
+
+    @Autowired
+    private SupplierService supplierService;
 
     public Product save(Product product) {
         return productRepository.save(product);
@@ -38,8 +42,24 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> findByName(String name) {
-        return productRepository.findProductsByName(name);
+    public Product findProductByName(String name) {
+        return productRepository.findProductByName(name);
+    }
+
+    public List<Product> findProductsByName(String name) {
+        return productRepository.findProductsByNameLike("%"+name+"%");
+    }
+
+    public List<Product> findProductsByCategory(Long categoryId) {
+        return productRepository.findProductByCategory(categoryId);
+    }
+
+    public List<Product> findProductsBySupplier(Long supplierId) {
+        Supplier supplier = supplierService.findById(supplierId);
+        if (supplier == null) {
+            return new ArrayList<Product>();
+        }
+        return productRepository.findProductBySupplier(supplier);
     }
 
     public void addSupplier(Supplier supplier, Long productId) {

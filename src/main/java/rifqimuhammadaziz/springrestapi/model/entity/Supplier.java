@@ -10,9 +10,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "supplier")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id") // To fix recursive loop json
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id") // To fix recursive loop json
 public class Supplier implements Serializable {
 
     @Id // Primary Key
@@ -29,7 +29,7 @@ public class Supplier implements Serializable {
     private String email;
 
     @ManyToMany(mappedBy = "suppliers") // Field name of supplier in Product
-    // @JsonBackReference
+    @JsonBackReference
     private Set<Product> products;
 
     public Set<Product> getProducts() {
