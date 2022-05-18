@@ -1,6 +1,7 @@
 package rifqimuhammadaziz.springrestapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rifqimuhammadaziz.springrestapi.model.entity.Category;
 import rifqimuhammadaziz.springrestapi.model.repository.CategoryRepository;
@@ -33,5 +34,13 @@ public class CategoryService {
 
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    public Iterable<Category> findByName(String name, Pageable pageable) {
+        return categoryRepository.findByNameContains(name, pageable);
+    }
+
+    public Iterable<Category> saveBatch(Iterable<Category> categories) {
+        return categoryRepository.saveAll(categories);
     }
 }
