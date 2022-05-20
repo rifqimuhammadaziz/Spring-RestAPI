@@ -35,6 +35,10 @@ public class AppUserService implements UserDetailsService {
             );
         }
 
+        user.setFullName(user.getFullName());
+        user.setEmail(user.getEmail());
+        user.setAppUserRole(user.getAppUserRole());
+
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return appUserRepository.save(user);
