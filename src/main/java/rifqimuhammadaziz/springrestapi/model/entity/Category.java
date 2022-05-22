@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "category")
-public class Category implements Serializable {
+public class Category extends BaseEntity<String> implements Serializable {
 
     @Id // Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
